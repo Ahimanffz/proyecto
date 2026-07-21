@@ -311,105 +311,94 @@ tr:hover { background: rgba(128, 128, 128, 0.05); }
 
 
 
+/* Ocultar el header móvil en PC por defecto */
+.mobile-header {
+    display: none;
+}
+
 /* ==========================================
-   📱 DISEÑO RESPONSIVO (MÓVILES Y TABLETS)
+   📱 DISEÑO RESPONSIVO Y MENÚ DESPLEGABLE
 ========================================== */
 @media (max-width: 768px) {
-    /* 1. Reestructurar el contenedor general (asumiendo que usas flexbox) */
-    body {
-        flex-direction: column;
-        overflow-x: hidden;
-    }
-
-    /* 2. Barra lateral (Sidebar) */
-    .sidebar {
-        width: 100%;
-        height: auto;
-        min-height: auto;
-        position: relative;
-        padding: 1rem;
-        border-right: none;
+    /* Mostrar Header Móvil */
+    .mobile-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        background-color: var(--glass-bg, rgba(20, 20, 20, 0.9));
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 1001;
     }
 
-    /* Opciones de la barra lateral en formato horizontal o cuadrícula */
+    .mobile-header h2 {
+        margin: 0;
+        font-size: 1.2rem;
+        color: var(--primary-color, #00E5FF);
+    }
+
+    .btn-icon {
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 1.8rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+    }
+
+    /* Ocultar logo duplicado en el menú */
+    .desktop-only {
+        display: none;
+    }
+
+    /* Convertir la barra lateral en menú desplegable */
+    .sidebar {
+        position: fixed;
+        top: 60px; /* Justo debajo del header móvil */
+        left: 0;
+        width: 100%;
+        height: calc(100vh - 60px);
+        background-color: var(--bg-color, #050505);
+        z-index: 1000;
+        display: none; /* Oculto hasta que se toque el botón */
+        flex-direction: column;
+        padding: 2rem;
+        overflow-y: auto;
+    }
+
+    /* Cuando JavaScript le agregue la clase 'active', se mostrará */
+    .sidebar.active {
+        display: flex;
+    }
+
+    /* Botones más grandes y cómodos para tocar en el teléfono */
     .backup-actions {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-        margin-top: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
     }
 
     .backup-actions button, 
     .backup-actions .label-btn {
         width: 100%;
-        margin: 0 !important;
-        font-size: 0.85rem;
-        padding: 0.5rem;
-        justify-content: center;
-    }
-
-    /* 3. Contenido Principal */
-    main, .main-content {
-        width: 100%;
         padding: 1rem;
-        margin-left: 0; /* Quita el margen si la barra lateral estaba fija */
+        font-size: 1.1rem;
+        justify-content: flex-start; /* Alinear texto a la izquierda */
+        margin: 0 !important;
     }
 
-    /* 4. Cuadrícula de tarjetas/estadísticas (1 sola columna) */
-    .cards-grid, 
-    .dashboard-cards, 
-    .stats-container {
-        grid-template-columns: 1fr;
-        gap: 15px;
-    }
-
-    /* 5. Formularios de ingreso */
-    .form-grid, 
-    .input-group {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .form-grid input, 
-    .form-grid select, 
-    .form-grid button {
-        width: 100%;
-    }
-
-    /* 6. Solución para las Tablas (Scroll Horizontal) */
-    /* Envuelve tu <table> en un <div> con la clase "table-responsive" si no la tiene */
-    .table-container, 
-    .table-responsive {
+    /* Arreglos para la tabla (scroll horizontal) */
+    .table-container {
         width: 100%;
         overflow-x: auto;
-        -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
-        border-radius: 8px;
+        -webkit-overflow-scrolling: touch;
         margin-top: 1rem;
     }
 
     table {
-        width: 100%;
-        min-width: 700px; /* Fuerza a la tabla a mantener su tamaño para que se active el scroll */
-    }
-
-    th, td {
-        padding: 0.75rem 0.5rem;
-        font-size: 0.9rem;
-    }
-}
-
-/* ==========================================
-   📱 AJUSTES PARA TELÉFONOS MUY PEQUEÑOS
-========================================== */
-@media (max-width: 480px) {
-    /* Los botones pasan a una sola columna para que no se corten los textos */
-    .backup-actions {
-        grid-template-columns: 1fr;
-    }
-    
-    h1, h2 {
-        font-size: 1.5rem;
+        min-width: 700px;
     }
 }
