@@ -310,7 +310,7 @@ tr:hover { background: rgba(128, 128, 128, 0.05); }
 }
 
 /* ==========================================
-   📱 ESTILOS PARA MENÚ DESPLEGABLE Y MÓVIL
+   📱 MENÚ DESPLEGABLE EN LISTA VERTICAL (HACIA ABAJO)
 ========================================== */
 
 /* Ocultar barra superior en PC */
@@ -319,7 +319,7 @@ tr:hover { background: rgba(128, 128, 128, 0.05); }
 }
 
 @media (max-width: 768px) {
-    /* 1. Mostrar barra superior fija en móviles */
+    /* 1. Header fijo en la parte superior */
     .mobile-header {
         display: flex;
         justify-content: space-between;
@@ -330,6 +330,7 @@ tr:hover { background: rgba(128, 128, 128, 0.05); }
         position: sticky;
         top: 0;
         z-index: 1000;
+        width: 100%;
     }
 
     .mobile-header .logo {
@@ -349,48 +350,97 @@ tr:hover { background: rgba(128, 128, 128, 0.05); }
         justify-content: center;
     }
 
-    /* Ocultar logo dentro del menú desplegable en móvil */
     .desktop-only {
         display: none !important;
     }
 
-    /* 2. Convertir la Sidebar en un menú desplegable deslizante */
+    /* 2. Menú en lista desplegable hacia abajo */
     .sidebar {
+        display: none; /* Oculto por defecto */
         position: fixed;
-        top: 60px; /* Justo debajo del header móvil */
+        top: 57px; /* Se posiciona justo debajo de la barra superior */
         left: 0;
         width: 100%;
-        height: calc(100vh - 60px);
-        background-color: var(--bg-dark, #050505);
+        max-height: calc(100vh - 60px);
+        background-color: var(--bg-dark, #080808);
+        border-bottom: 2px solid var(--primary-color, #00e5ff);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.9);
         z-index: 999;
-        display: none; /* Oculto por defecto */
-        flex-direction: column;
-        padding: 1.5rem;
+        padding: 1rem 1.2rem;
         overflow-y: auto;
+        flex-direction: column;
     }
 
-    /* Clase activa que muestra el menú desplegable */
+    /* Al activar la clase, se despliega en lista hacia abajo */
     .sidebar.active {
         display: flex;
+        animation: desplegarAbajo 0.25s ease-out forwards;
     }
 
-    /* 3. Reorganización de elementos del contenido */
+    /* Animación de apertura vertical */
+    @keyframes desplegarAbajo {
+        from {
+            opacity: 0;
+            transform: translateY(-12px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* 3. Organización de elementos en la lista vertical */
+    .menu {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        width: 100%;
+    }
+
+    .nav-btn {
+        width: 100%;
+        text-align: left;
+        justify-content: flex-start;
+        padding: 0.8rem 1rem;
+        border-radius: 8px;
+    }
+
+    .backup-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 100%;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .backup-actions .btn-outline,
+    .backup-actions .label-btn {
+        width: 100%;
+        text-align: left;
+        justify-content: flex-start;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0.7rem 1rem;
+    }
+
+    /* 4. Ajustes del contenido para móviles */
     .main-content {
         padding: 1rem;
+        width: 100%;
     }
 
-    /* Tarjetas de estadísticas a 1 o 2 columnas */
     .stats-grid {
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
         gap: 10px;
     }
 
-    /* Formularios adaptados a 1 columna */
     .grid-form {
         grid-template-columns: 1fr !important;
     }
 
-    /* Habilitar desplazamiento horizontal en tablas sin romper la pantalla */
     .table-container {
         width: 100%;
         overflow-x: auto;
@@ -398,6 +448,6 @@ tr:hover { background: rgba(128, 128, 128, 0.05); }
     }
 
     table {
-        min-width: 650px;
+        min-width: 600px;
     }
 }
