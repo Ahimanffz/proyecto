@@ -310,21 +310,38 @@ tr:hover { background: rgba(128, 128, 128, 0.05); }
 }
 
 /* ==========================================
-   📱 MENÚ DESPLEGABLE EN LISTA VERTICAL (HACIA ABAJO)
+   FIX GENERAL DE ESCALADO MÓVIL Y ZOOM
 ========================================== */
+html {
+    /* Desactiva el auto-agrandado de texto que hace iOS en iPhone */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    box-sizing: border-box;
+}
 
-/* Ocultar barra superior en PC */
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+/* Permitir que el usuario haga zoom cómodo si lo requiere */
+body {
+    touch-action: manipulation;
+}
+
+/* ==========================================
+   📱 ADAPTABILIDAD MÓVIL (IPHONE Y ANDROID)
+========================================== */
 .mobile-header {
     display: none;
 }
 
 @media (max-width: 768px) {
-    /* 1. Header fijo en la parte superior */
+    /* Header fijo y contenido bien separado */
     .mobile-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0.8rem 1.2rem;
+        padding: 0.7rem 1rem;
         background-color: var(--bg-dark, #050505);
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         position: sticky;
@@ -333,55 +350,70 @@ tr:hover { background: rgba(128, 128, 128, 0.05); }
         width: 100%;
     }
 
+    /* Control exacto del logo KYROX en pantalla */
     .mobile-header .logo {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 6px;
+        max-width: 70%;
+    }
+
+    /* clamp() ajusta la fuente dinámicamente según el ancho de pantalla */
+    .mobile-header .logo h2 {
+        font-size: clamp(1rem, 4.5vw, 1.25rem) !important;
+        margin: 0;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .mobile-header .logo i {
+        font-size: 1.3rem;
+        color: var(--primary-color, #00e5ff);
     }
 
     .btn-icon {
         background: transparent;
         border: none;
         color: var(--text-main, #fff);
-        font-size: 1.8rem;
+        font-size: 1.6rem;
         cursor: pointer;
+        padding: 4px;
         display: flex;
         align-items: center;
-        justify-content: center;
     }
 
     .desktop-only {
         display: none !important;
     }
 
-    /* 2. Menú en lista desplegable hacia abajo */
+    /* Menú Desplegable Vertical */
     .sidebar {
-        display: none; /* Oculto por defecto */
+        display: none;
         position: fixed;
-        top: 57px; /* Se posiciona justo debajo de la barra superior */
+        top: 52px; /* Alineado justo bajo la barra superior móvil */
         left: 0;
         width: 100%;
-        max-height: calc(100vh - 60px);
+        max-height: calc(100vh - 55px);
         background-color: var(--bg-dark, #080808);
         border-bottom: 2px solid var(--primary-color, #00e5ff);
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.9);
         z-index: 999;
-        padding: 1rem 1.2rem;
+        padding: 1rem;
         overflow-y: auto;
         flex-direction: column;
     }
 
-    /* Al activar la clase, se despliega en lista hacia abajo */
     .sidebar.active {
         display: flex;
         animation: desplegarAbajo 0.25s ease-out forwards;
     }
 
-    /* Animación de apertura vertical */
     @keyframes desplegarAbajo {
         from {
             opacity: 0;
-            transform: translateY(-12px);
+            transform: translateY(-10px);
         }
         to {
             opacity: 1;
@@ -389,7 +421,6 @@ tr:hover { background: rgba(128, 128, 128, 0.05); }
         }
     }
 
-    /* 3. Organización de elementos en la lista vertical */
     .menu {
         display: flex;
         flex-direction: column;
@@ -401,7 +432,8 @@ tr:hover { background: rgba(128, 128, 128, 0.05); }
         width: 100%;
         text-align: left;
         justify-content: flex-start;
-        padding: 0.8rem 1rem;
+        padding: 0.75rem 0.9rem;
+        font-size: 0.95rem;
         border-radius: 8px;
     }
 
@@ -410,8 +442,8 @@ tr:hover { background: rgba(128, 128, 128, 0.05); }
         flex-direction: column;
         gap: 0.5rem;
         width: 100%;
-        margin-top: 1rem;
-        padding-top: 1rem;
+        margin-top: 0.8rem;
+        padding-top: 0.8rem;
         border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
 
@@ -423,18 +455,40 @@ tr:hover { background: rgba(128, 128, 128, 0.05); }
         display: flex;
         align-items: center;
         gap: 10px;
-        padding: 0.7rem 1rem;
+        padding: 0.65rem 0.9rem;
+        font-size: 0.9rem;
     }
 
-    /* 4. Ajustes del contenido para móviles */
+    /* Ajustes proporcionales para el Dashboard y Módulos */
     .main-content {
-        padding: 1rem;
+        padding: 0.8rem;
         width: 100%;
     }
 
+    .main-content h1 {
+        font-size: clamp(1.2rem, 5vw, 1.5rem);
+    }
+
+    .main-content h2 {
+        font-size: clamp(1rem, 4vw, 1.2rem);
+    }
+
+    /* Tarjetas de estadísticas equilibradas para pantallas pequeñas */
     .stats-grid {
         grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-        gap: 10px;
+        gap: 8px;
+    }
+
+    .stat-card {
+        padding: 0.75rem;
+    }
+
+    .stat-card h3 {
+        font-size: 0.75rem;
+    }
+
+    .stat-card p {
+        font-size: 1.1rem;
     }
 
     .grid-form {
@@ -448,6 +502,7 @@ tr:hover { background: rgba(128, 128, 128, 0.05); }
     }
 
     table {
-        min-width: 600px;
+        min-width: 580px;
+        font-size: 0.85rem;
     }
 }
