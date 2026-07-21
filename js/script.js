@@ -670,3 +670,27 @@ window.addEventListener('appinstalled', () => {
     deferredPrompt = null;
     showToast('¡Aplicación instalada con éxito!', 'success');
 });
+
+
+/* ==========================================
+   MENÚ DESPLEGABLE MÓVIL
+========================================== */
+const btnMenuToggle = document.getElementById('btn-menu-toggle');
+const sidebarMenu = document.getElementById('sidebar-menu');
+
+if (btnMenuToggle && sidebarMenu) {
+    btnMenuToggle.addEventListener('click', () => {
+        // Activa o desactiva la visibilidad del menú
+        sidebarMenu.classList.toggle('active');
+        
+        // Cambiar el icono (de hamburguesa a X)
+        const icon = btnMenuToggle.querySelector('i');
+        if (sidebarMenu.classList.contains('active')) {
+            icon.classList.remove('ph-list');
+            icon.classList.add('ph-x');
+        } else {
+            icon.classList.remove('ph-x');
+            icon.classList.add('ph-list');
+        }
+    });
+}
