@@ -4,11 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KYROX TECHNOLOGY | Sales & Inventory</title>
-    <!-- Google Fonts: Inter -->
+    
+    <!-- ETIQUETAS PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#050505">
+    <link rel="apple-touch-icon" href="img/icon-192x192.png">
+    
+    <!-- Google Fonts y Phosphor Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -27,6 +31,11 @@
             <button class="nav-btn" data-target="sales"><i class="ph ph-shopping-cart"></i> Ventas</button>
         </nav>
         <div class="backup-actions">
+            <!-- BOTÓN DE INSTALACIÓN PWA (Oculto por defecto) -->
+            <button id="btn-install-app" class="btn-outline mb-2 hidden" style="border-color: var(--primary-color); color: var(--primary-color); font-weight: bold;">
+                <i class="ph ph-device-mobile"></i> Instalar App
+            </button>
+            
             <button id="btn-theme-toggle" class="btn-outline mb-2"><i class="ph ph-sun"></i> Modo Claro</button>
             <button id="btn-export" class="btn-outline"><i class="ph ph-download-simple"></i> Exportar CSV</button>
             <label for="btn-import" class="btn-outline label-btn">
@@ -214,7 +223,7 @@
                     </div>
                     <div class="form-group full-width">
                         <label>Descripción de Variación (Opcional)</label>
-                        <input type="text" id="var-desc" placeholder="Ej: Color rojo, chasis de aluminio...">
+                        <input type="text" id="var-desc" placeholder="Ej: iPhone color rojo">
                     </div>
                     
                     <div class="form-actions full-width">
@@ -299,8 +308,21 @@
             </div>
         </div>
     </div>
+    <!-- ... tu código HTML anterior ... -->
     <div id="toast-container"></div>
 
+    <!-- SCRIPT DEL SERVICE WORKER (Nuevo) -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(registration => console.log('ServiceWorker registrado con éxito'))
+                    .catch(err => console.log('Error al registrar el ServiceWorker:', err));
+            });
+        }
+    </script>
+    
+    <!-- Tu script original -->
     <script src="js/script.js"></script>
 </body>
 </html>
