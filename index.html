@@ -19,30 +19,41 @@
 </head>
 <body>
     <!-- Contenedor Principal (Layout) -->
+    <!-- Contenedor Principal (Layout) -->
     <div class="app-layout">
         
-        <!-- BARRA LATERAL (Sidebar) -->
-        <aside class="sidebar glass">
-            <div class="brand-logo">
+        <!-- HEADER MÓVIL (Solo visible en teléfonos) -->
+        <div class="mobile-header">
+            <h2>KyroX Shop</h2>
+            <button id="btn-menu-toggle" class="btn-icon">
+                <i class="ph ph-list"></i>
+            </button>
+        </div>
+
+        <!-- BARRA LATERAL / MENÚ DESPLEGABLE -->
+        <aside class="sidebar glass" id="sidebar-menu">
+            <!-- Este logo se verá solo en PC -->
+            <div class="brand-logo desktop-only">
                 <h2>KyroX Shop</h2>
             </div>
             
-            <!-- Acciones y Botones -->
+            <!-- Todas tus opciones del menú -->
             <div class="backup-actions">
-                <!-- BOTÓN DE INSTALACIÓN PWA -->
-                <button id="btn-install-app" class="btn-outline mb-2 hidden" style="border-color: var(--primary-color); color: var(--primary-color); font-weight: bold;">
+                <button id="btn-install-app" class="btn-outline hidden" style="border-color: var(--primary-color); color: var(--primary-color); font-weight: bold;">
                     <i class="ph ph-device-mobile"></i> Instalar App
                 </button>
-                
-                <button id="btn-theme-toggle" class="btn-outline mb-2"><i class="ph ph-sun"></i> Modo Claro</button>
+                <button id="btn-theme-toggle" class="btn-outline"><i class="ph ph-sun"></i> Modo Claro</button>
                 <button id="btn-export" class="btn-outline"><i class="ph ph-download-simple"></i> Exportar CSV</button>
                 <label for="btn-import" class="btn-outline label-btn">
                     <i class="ph ph-upload-simple"></i> Importar CSV
                     <input type="file" id="btn-import" accept=".csv" style="display: none;">
                 </label>
-                <button id="btn-reset-system" class="btn-outline btn-danger-outline mt-2"><i class="ph ph-warning"></i> Reiniciar Sistema</button>
+                <button id="btn-reset-system" class="btn-outline btn-danger-outline"><i class="ph ph-warning"></i> Reiniciar Sistema</button>
             </div>
         </aside>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <!-- ... (tu etiqueta <main> sigue exactamente igual) ... -->
 
         <!-- CONTENIDO PRINCIPAL -->
         <main class="main-content">
