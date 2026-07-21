@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KYROX TECHNOLOGY | Sales & Inventory</title>
+    
+    <!-- ETIQUETAS PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#050505">
+    <link rel="apple-touch-icon" href="img/icon-192x192.png">
+    
+    <!-- Google Fonts y Phosphor Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Sidebar de Navegación -->
+    <aside class="sidebar glass">
+        <div class="logo">
+            <i class="ph ph-hexagon"></i>
+            <h2>KYROX</h2>
+        </div>
+        <nav class="menu">
+            <button class="nav-btn active" data-target="dashboard"><i class="ph ph-squares-four"></i> Dashboard</button>
+            <button class="nav-btn" data-target="categories"><i class="ph ph-tag"></i> Categorías</button>
+            <button class="nav-btn" data-target="products"><i class="ph ph-package"></i> Productos</button>
+            <button class="nav-btn" data-target="variations"><i class="ph ph-git-merge"></i> Variaciones</button>
+            <button class="nav-btn" data-target="sales"><i class="ph ph-shopping-cart"></i> Ventas</button>
+        </nav>
+        <div class="backup-actions">
+            <!-- BOTÓN DE INSTALACIÓN PWA (Oculto por defecto) -->
+            <button id="btn-install-app" class="btn-outline mb-2 hidden" style="border-color: var(--primary-color); color: var(--primary-color); font-weight: bold;">
+                <i class="ph ph-device-mobile"></i> Instalar App
+            </button>
+            
+            <button id="btn-theme-toggle" class="btn-outline mb-2"><i class="ph ph-sun"></i> Modo Claro</button>
+            <button id="btn-export" class="btn-outline"><i class="ph ph-download-simple"></i> Exportar CSV</button>
+            <label for="btn-import" class="btn-outline label-btn">
+                <i class="ph ph-upload-simple"></i> Importar CSV
+                <input type="file" id="btn-import" accept=".csv" style="display: none;">
+            </label>
+            <button id="btn-reset-system" class="btn-outline btn-danger-outline mt-2"><i class="ph ph-warning"></i> Reiniciar Sistema</button>
+        </div>
+    </aside>
+
+    <!-- Contenido Principal -->
+    <main class="main-content">
+        
+        <!-- Módulo: Dashboard -->
+        <section id="dashboard" class="module active fade-in">
+            <header>
+                <h1>Dashboard Resumen</h1>
+                <p>Visión general del sistema KYROX.</p>
+            </header>
+            <div class="stats-grid">
+                <div class="stat-card glass">
+                    <div class="stat-icon"><i class="ph ph-tag"></i></div>
+                    <div class="stat-info">
+                        <h3>Categorías</h3>
+                        <p id="stat-categories">0</p>
+                    </div>
+                </div>
+                <div class="stat-card glass">
+                    <div class="stat-icon"><i class="ph ph-package"></i></div>
+                    <div class="stat-info">
+                        <h3>Productos Totales</h3>
+                        <p id="stat-products">0</p>
+                    </div>
+                </div>
+                <div class="stat-card glass">
+                    <div class="stat-icon"><i class="ph ph-git-merge"></i></div>
+                    <div class="stat-info">
+                        <h3>Variaciones</h3>
+                        <p id="stat-variations">0</p>
+                    </div>
+                </div>
+                <div class="stat-card glass">
+                    <div class="stat-icon"><i class="ph ph-shopping-bag"></i></div>
+                    <div class="stat-info">
+                        <h3>Ventas Realizadas</h3>
+                        <p id="stat-sales">0</p>
+                    </div>
+                </div>
+                <div class="stat-card glass">
+                    <div class="stat-icon"><i class="ph ph-stack"></i></div>
+                    <div class="stat-info">
+                        <h3>Stock Total</h3>
+                        <p id="stat-stock">0</p>
+                    </div>
+                </div>
+                <div class="stat-card glass highlight">
+                    <div class="stat-icon"><i class="ph ph-currency-dollar"></i></div>
+                    <div class="stat-info">
+                        <h3>Ingresos Totales</h3>
+                        <p id="stat-revenue">$0.00</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel glass mt-4 fade-in">
+                <header style="margin-bottom: 16px;">
+                    <h2 style="font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">
+                        <i class="ph ph-bell-ringing" style="color: var(--primary-color);"></i> 
+                        Alertas de Inventario
+                    </h2>
+                </header>
+                <div id="stock-alerts-container" class="alerts-list">
+                    <!-- Dinámico -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Módulo: Categorías -->
+        <section id="categories" class="module fade-in">
+            <header>
+                <h1>Gestión de Categorías</h1>
+            </header>
+            <div class="panel glass">
+                <form id="form-category" class="modern-form">
+                    <input type="hidden" id="cat-id">
+                    <div class="form-group">
+                        <label>Nombre de Categoría</label>
+                        <input type="text" id="cat-name" placeholder="Ej: Laptops" required>
+                    </div>
+                    <button type="submit" class="btn-primary" id="btn-submit-cat">Agregar Categoría</button>
+                    <button type="button" class="btn-outline hidden" id="btn-cancel-cat">Cancelar</button>
+                </form>
+            </div>
+            <div class="panel glass mt-4">
+                <div class="toolbar">
+                    <div class="search-box">
+                        <i class="ph ph-magnifying-glass"></i>
+                        <input type="text" id="search-cat" placeholder="Buscar categoría...">
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table id="table-categories">
+                        <thead><tr><th>ID</th><th>Nombre</th><th>Acciones</th></tr></thead>
+                        <tbody><!-- Dinámico --></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Módulo: Productos -->
+        <section id="products" class="module fade-in">
+            <header>
+                <h1>Gestión de Productos</h1>
+            </header>
+            <div class="panel glass">
+                <form id="form-product" class="modern-form grid-form">
+                    <input type="hidden" id="prod-id">
+                    <div class="form-group">
+                        <label>Nombre del Producto</label>
+                        <input type="text" id="prod-name" placeholder="Ej: MacBook Pro" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Categoría</label>
+                        <select id="prod-category" required><option value="">Seleccione...</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Precio Base ($)</label>
+                        <input type="number" id="prod-price" step="0.01" min="0" placeholder="0.00" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Cantidad en Inventario Base</label>
+                        <input type="number" id="prod-qty" min="0" placeholder="0" required>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Descripción</label>
+                        <input type="text" id="prod-desc" placeholder="Breve descripción del producto" required>
+                    </div>
+                    <div class="form-actions full-width">
+                        <button type="submit" class="btn-primary" id="btn-submit-prod">Agregar Producto</button>
+                        <button type="button" class="btn-outline hidden" id="btn-cancel-prod">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+            <div class="panel glass mt-4">
+                <div class="toolbar">
+                    <div class="search-box">
+                        <i class="ph ph-magnifying-glass"></i>
+                        <input type="text" id="search-prod" placeholder="Buscar producto...">
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table id="table-products">
+                        <thead><tr><th>ID</th><th>Producto</th><th>Categoría</th><th>Variaciones (Etiquetas)</th><th>Precio Base</th><th>Stock Base</th><th>Acciones</th></tr></thead>
+                        <tbody><!-- Dinámico --></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Módulo: Variaciones -->
+        <section id="variations" class="module fade-in">
+            <header>
+                <h1>Variaciones de Producto</h1>
+                <p>Las variaciones pueden usar el inventario del producto principal o tener su propio stock independiente.</p>
+            </header>
+            <div class="panel glass">
+                <form id="form-variation" class="modern-form grid-form">
+                    <input type="hidden" id="var-id">
+                    <div class="form-group">
+                        <label>Producto Base</label>
+                        <select id="var-product" required><option value="">Seleccione...</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Nombre de Variación</label>
+                        <input type="text" id="var-name" placeholder="Ej: 16GB RAM / 512GB SSD" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Precio Adicional ($)</label>
+                        <input type="number" id="var-price" step="0.01" min="0" value="0" required>
+                    </div>
+                    <!-- CAMPO NUEVO: Stock Opcional -->
+                    <div class="form-group">
+                        <label>Stock Independiente (Opcional)</label>
+                        <input type="number" id="var-qty" min="0" placeholder="Vacío = Usa stock base">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Descripción de Variación (Opcional)</label>
+                        <input type="text" id="var-desc" placeholder="Ej: iPhone color rojo">
+                    </div>
+                    
+                    <div class="form-actions full-width">
+                        <button type="submit" class="btn-primary" id="btn-submit-var">Agregar Variación</button>
+                        <button type="button" class="btn-outline hidden" id="btn-cancel-var">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+            <div class="panel glass mt-4">
+                <div class="toolbar">
+                    <div class="search-box">
+                        <i class="ph ph-magnifying-glass"></i>
+                        <input type="text" id="search-var" placeholder="Buscar variación...">
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table id="table-variations">
+                        <thead><tr><th>ID</th><th>Producto Base</th><th>Variación</th><th>Precio Extra</th><th>Stock</th><th>Acciones</th></tr></thead>
+                        <tbody><!-- Dinámico --></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Módulo: Ventas -->
+        <section id="sales" class="module fade-in">
+            <header>
+                <h1>Registro de Ventas</h1>
+            </header>
+            <div class="panel glass">
+                <form id="form-sale" class="modern-form grid-form">
+                    <div class="form-group">
+                        <label>Seleccionar Producto</label>
+                        <select id="sale-product" required><option value="">Seleccione producto...</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Seleccionar Variación (Opcional)</label>
+                        <select id="sale-variation"><option value="">Sin variación</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Cantidad</label>
+                        <input type="number" id="sale-qty" min="1" value="1" required>
+                    </div>
+                    
+                    <!-- Cuadro de descripción y stock en vivo -->
+                    <div class="form-group full-width" id="sale-preview-container" style="display:none; background: rgba(0, 229, 255, 0.05); padding: 12px; border-radius: 8px; border: 1px dashed rgba(0, 229, 255, 0.4);">
+                        <p id="sale-desc-preview" style="font-size: 0.9rem; color: var(--text-main); line-height: 1.5;"></p>
+                    </div>
+                    
+                    <div class="sale-summary full-width">
+                        <p>Subtotal: <span id="sale-subtotal">$0.00</span></p>
+                        <p>IVA (16%): <span id="sale-iva">$0.00</span></p>
+                        <h3>Total a Pagar: <span id="sale-total" class="color-primary">$0.00</span></h3>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary full-width" id="btn-submit-sale">Registrar Venta</button>
+                </form>
+            </div>
+            <div class="panel glass mt-4">
+                <header><h2>Historial de Ventas</h2></header>
+                <div class="table-container">
+                    <table id="table-sales">
+                        <thead><tr><th>ID / Fecha</th><th>Detalle</th><th>Cant.</th><th>Subtotal</th><th>IVA</th><th>Total</th></tr></thead>
+                        <tbody><!-- Dinámico --></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal de Confirmación -->
+    <div id="reset-modal" class="modal-overlay hidden">
+        <div class="modal-content glass fade-in">
+            <div class="modal-icon"><i class="ph ph-warning-octagon"></i></div>
+            <h2>¿Reiniciar Sistema Completo?</h2>
+            <p>Esta acción eliminará <strong>absolutamente todos</strong> los datos.</p>
+            <p style="color: var(--primary-color); font-weight: 500; margin-top: 8px;">Se descargará un respaldo CSV automáticamente.</p>
+            
+            <div class="modal-actions mt-4">
+                <button id="btn-cancel-reset" class="btn-outline">Cancelar</button>
+                <button id="btn-confirm-reset" class="btn-primary btn-danger">Exportar y Reiniciar</button>
+            </div>
+        </div>
+    </div>
+    <!-- ... tu código HTML anterior ... -->
+    <div id="toast-container"></div>
+
+    <!-- SCRIPT DEL SERVICE WORKER (Nuevo) -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(registration => console.log('ServiceWorker registrado con éxito'))
+                    .catch(err => console.log('Error al registrar el ServiceWorker:', err));
+            });
+        }
+    </script>
+    
+    <!-- Tu script original -->
+    <script src="js/script.js"></script>
+</body>
+</html>
