@@ -7,10 +7,6 @@ let products = JSON.parse(localStorage.getItem('kyrox_products')) || [];
 let variations = JSON.parse(localStorage.getItem('kyrox_variations')) || [];
 let sales = JSON.parse(localStorage.getItem('kyrox_sales')) || [];
 
-let categories = [];
-let products = [];
-let variations = [];
-let sales = [];
 
 let editingCategoryId = null;
 let editingProductId = null;
