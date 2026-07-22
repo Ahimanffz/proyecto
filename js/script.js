@@ -21,7 +21,36 @@ const db = getFirestore(app);
 const auth = getAuth(app); // Preparado para la futura implementación de usuarios
 
 export { db, auth };
+// Listener para Categorías
+onSnapshot(collection(db, "categories"), (snapshot) => {
+    categories = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    renderCategories();
+    populateDropdowns();
+    updateDashboard();
+});
 
+// Listener para Productos
+onSnapshot(collection(db, "products"), (snapshot) => {
+    products = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    renderProducts();
+    populateDropdowns();
+    updateDashboard();
+});
+
+// Listener para Variaciones
+onSnapshot(collection(db, "variations"), (snapshot) => {
+    variations = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    renderVariations();
+    renderProducts();
+    updateDashboard();
+});
+
+// Listener para Ventas
+onSnapshot(collection(db, "sales"), (snapshot) => {
+    sales = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    renderSales();
+    updateDashboard();
+});
 
 
 formCategory.addEventListener('submit', async (e) => {
@@ -50,7 +79,18 @@ formCategory.addEventListener('submit', async (e) => {
 });
 
 
-
+window.deleteProduct = async (id) => {
+    if (variations.some(v => v.productId === id) || sales.some(s => s.productId === id)) {
+        return showToast('No se puede eliminar: Tiene variaciones o ventas asociadas', 'error');
+    }
+    
+    try {
+        await deleteDoc(doc(db, "products", id));
+        showToast('Producto eliminado de la nube');
+    } catch (error) {
+        showToast('Error al eliminar', 'error');
+    }
+};
 
 /* ==========================================
    ESTRUCTURAS DE DATOS Y TEMA
