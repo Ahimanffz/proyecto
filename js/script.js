@@ -24,15 +24,176 @@ const auth = getAuth(app); // Preparado para la futura implementación de usuari
 export { db, auth };
 
 
+// Listener para Categorías
+onSnapshot(collection(db, "categories"), (snapshot) => {
+    categories = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    renderCategories();
+    populateDropdowns();
+    updateDashboard();
+});
+
+// Listener para Productos
+onSnapshot(collection(db, "products"), (snapshot) => {
+    products = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    renderProducts();
+    populateDropdowns();
+    updateDashboard();
+});
+
+// Listener para Variaciones
+onSnapshot(collection(db, "variations"), (snapshot) => {
+    variations = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    renderVariations();
+    renderProducts();
+    updateDashboard();
+});
+
+// Listener para Ventas
+onSnapshot(collection(db, "sales"), (snapshot) => {
+    sales = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    renderSales();
+    updateDashboard();
+});
 
 
+formCategory.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const nameInput = document.getElementById('cat-name');
+    const name = nameInput ? nameInput.value.trim() : '';
+    
+    if (!name) return showToast('El nombre no puede estar vacío', 'error');
+
+    try {
+        if (editingCategoryId) {
+            const catRef = doc(db, "categories", editingCategoryId);
+            await updateDoc(catRef, { name });
+            showToast('Categoría actualizada');
+            resetCategoryForm();
+        } else {
+            await addDoc(collection(db, "categories"), { name });
+            showToast('Categoría creada exitosamente');
+            formCategory.reset();
+        }
+        // Ya no necesitas saveData() ni llamar a los renders manualmente aquí
+    } catch (error) {
+        showToast('Error al guardar en la nube', 'error');
+        console.error(error);
+    }
+});
 
 
+window.deleteProduct = async (id) => {
+    if (variations.some(v => v.productId === id) || sales.some(s => s.productId === id)) {
+        return showToast('No se puede eliminar: Tiene variaciones o ventas asociadas', 'error');
+    }
+    
+    try {
+        await deleteDoc(doc(db, "products", id));
+        showToast('Producto eliminado de la nube');
+    } catch (error) {
+        showToast('Error al eliminar', 'error');
+    }
+};
+
+formSale.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    // ... (Mantienes tu lógica de validación de variables y stock) ...
+
+    if (availableStock < qty) {
+        return showToast('Stock insuficiente para realizar esta venta', 'error');
+    }
+
+    try {
+        // 1. Restar el stock en la nube
+        if (hasIndependentStock) {
+            const varRef = doc(db, "variations", variation.id);
+            await updateDoc(varRef, { quantity: variation.quantity - qty });
+        } else {
+            const prodRef = doc(db, "products", prodId);
+            await updateDoc(prodRef, { quantity: products[prodIndex].quantity - qty });
+        }
+
+        // 2. Registrar la venta
+        const subtotal = (products[prodIndex].price + (variation ? variation.price : 0)) * qty;
+        const iva = subtotal * 0.16;
+        
+        await addDoc(collection(db, "sales"), {
+            prodId,
+            varId,
+            qty,
+            subtotal,
+            iva,
+            total: subtotal + iva,
+            date: new Date().toLocaleString()
+        });
+
+        showToast('Venta registrada y sincronizada.');
+        formSale.reset(); 
+        updateSaleUI(0, 0, 0);
+        document.getElementById('sale-preview-container').style.display = 'none';
+
+    } catch (error) {
+        showToast('Error al procesar la venta', 'error');
+        console.error(error);
+    }
+});
 
 
+window.deleteProduct = async (id) => {
+    if (variations.some(v => v.productId === id) || sales.some(s => s.productId === id)) {
+        return showToast('No se puede eliminar: Tiene variaciones o ventas asociadas', 'error');
+    }
+    
+    try {
+        await deleteDoc(doc(db, "products", id));
+        showToast('Producto eliminado de la nube');
+    } catch (error) {
+        showToast('Error al eliminar', 'error');
+    }
+};
 
+formSale.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    // ... (Mantienes tu lógica de validación de variables y stock) ...
 
+    if (availableStock < qty) {
+        return showToast('Stock insuficiente para realizar esta venta', 'error');
+    }
 
+    try {
+        // 1. Restar el stock en la nube
+        if (hasIndependentStock) {
+            const varRef = doc(db, "variations", variation.id);
+            await updateDoc(varRef, { quantity: variation.quantity - qty });
+        } else {
+            const prodRef = doc(db, "products", prodId);
+            await updateDoc(prodRef, { quantity: products[prodIndex].quantity - qty });
+        }
+
+        // 2. Registrar la venta
+        const subtotal = (products[prodIndex].price + (variation ? variation.price : 0)) * qty;
+        const iva = subtotal * 0.16;
+        
+        await addDoc(collection(db, "sales"), {
+            prodId,
+            varId,
+            qty,
+            subtotal,
+            iva,
+            total: subtotal + iva,
+            date: new Date().toLocaleString()
+        });
+
+        showToast('Venta registrada y sincronizada.');
+        formSale.reset(); 
+        updateSaleUI(0, 0, 0);
+        document.getElementById('sale-preview-container').style.display = 'none';
+
+    } catch (error) {
+        showToast('Error al procesar la venta', 'error');
+        console.error(error);
+    }
+});
 /* ==========================================
    ESTRUCTURAS DE DATOS Y TEMA
 ========================================== */
