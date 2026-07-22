@@ -1,18 +1,25 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { 
+    getFirestore, 
+    collection, 
+    onSnapshot, 
+    addDoc, 
+    updateDoc, 
+    deleteDoc, 
+    doc 
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* ==========================================
-   ESTRUCTURAS DE DATOS Y TEMA
-========================================== */
-let categories = JSON.parse(localStorage.getItem('kyrox_categories')) || [];
-let products = JSON.parse(localStorage.getItem('kyrox_products')) || [];
-let variations = JSON.parse(localStorage.getItem('kyrox_variations')) || [];
-let sales = JSON.parse(localStorage.getItem('kyrox_sales')) || [];
+const firebaseConfig = {
+    apiKey: "TU_API_KEY",
+    authDomain: "TU_PROYECTO.firebaseapp.com",
+    projectId: "TU_PROYECTO",
+    storageBucket: "TU_PROYECTO.appspot.com",
+    messagingSenderId: "TU_SENDER_ID",
+    appId: "TU_APP_ID"
+};
 
-
-let editingCategoryId = null;
-let editingProductId = null;
-let editingVariationId = null;
-
-
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 // Listener para Categorías
 onSnapshot(collection(db, "categories"), (snapshot) => {
@@ -43,6 +50,31 @@ onSnapshot(collection(db, "sales"), (snapshot) => {
     sales = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     renderSales();
     updateDashboard();
+});
+
+formCategory.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const nameInput = document.getElementById('cat-name');
+    const name = nameInput ? nameInput.value.trim() : '';
+    
+    if (!name) return showToast('El nombre no puede estar vacío', 'error');
+
+    try {
+        if (editingCategoryId) {
+            const catRef = doc(db, "categories", editingCategoryId);
+            await updateDoc(catRef, { name });
+            showToast('Categoría actualizada');
+            resetCategoryForm();
+        } else {
+            await addDoc(collection(db, "categories"), { name });
+            showToast('Categoría creada exitosamente');
+            formCategory.reset();
+        }
+        // Ya no necesitas saveData() ni llamar a los renders manualmente aquí
+    } catch (error) {
+        showToast('Error al guardar en la nube', 'error');
+        console.error(error);
+    }
 });
 
 window.deleteProduct = async (id) => {
@@ -100,6 +132,43 @@ formSale.addEventListener('submit', async (e) => {
         console.error(error);
     }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ==========================================
+   ESTRUCTURAS DE DATOS Y TEMA
+========================================== */
+let categories = JSON.parse(localStorage.getItem('kyrox_categories')) || [];
+let products = JSON.parse(localStorage.getItem('kyrox_products')) || [];
+let variations = JSON.parse(localStorage.getItem('kyrox_variations')) || [];
+let sales = JSON.parse(localStorage.getItem('kyrox_sales')) || [];
+
+function saveData() {
+    localStorage.setItem('kyrox_categories', JSON.stringify(categories));
+    localStorage.setItem('kyrox_products', JSON.stringify(products));
+    localStorage.setItem('kyrox_variations', JSON.stringify(variations));
+    localStorage.setItem('kyrox_sales', JSON.stringify(sales));
+}
+
+let categories = [];
+let products = [];
+let variations = [];
+let sales = [];
+
+let editingCategoryId = null;
+let editingProductId = null;
+let editingVariationId = null;
 
 const themeToggleBtn = document.getElementById('btn-theme-toggle');
 const currentTheme = localStorage.getItem('kyrox_theme') || 'dark';
