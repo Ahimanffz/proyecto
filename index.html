@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KYROX TECHNOLOGY | Sales & Inventory</title>
     
     <!-- ETIQUETAS PWA -->
@@ -17,20 +17,9 @@
 </head>
 <body>
 
-    <!-- BARRA SUPERIOR MÓVIL (Solo visible en pantallas pequeñas) -->
-    <header class="mobile-header">
+    <!-- Sidebar de Navegación -->
+    <aside class="sidebar glass">
         <div class="logo">
-            <i class="ph ph-hexagon"></i>
-            <h2>KYROX</h2>
-        </div>
-        <button id="btn-menu-toggle" class="btn-icon" aria-label="Abrir Menú">
-            <i class="ph ph-list"></i>
-        </button>
-    </header>
-
-    <!-- Sidebar / Menú Desplegable de Navegación -->
-    <aside class="sidebar glass" id="sidebar-menu">
-        <div class="logo desktop-only">
             <i class="ph ph-hexagon"></i>
             <h2>KYROX</h2>
         </div>
@@ -42,7 +31,7 @@
             <button class="nav-btn" data-target="sales"><i class="ph ph-shopping-cart"></i> Ventas</button>
         </nav>
         <div class="backup-actions">
-            <!-- BOTÓN DE INSTALACIÓN PWA -->
+            <!-- BOTÓN DE INSTALACIÓN PWA (Oculto por defecto) -->
             <button id="btn-install-app" class="btn-outline mb-2 hidden" style="border-color: var(--primary-color); color: var(--primary-color); font-weight: bold;">
                 <i class="ph ph-device-mobile"></i> Instalar App
             </button>
@@ -227,6 +216,7 @@
                         <label>Precio Adicional ($)</label>
                         <input type="number" id="var-price" step="0.01" min="0" value="0" required>
                     </div>
+                    <!-- CAMPO NUEVO: Stock Opcional -->
                     <div class="form-group">
                         <label>Stock Independiente (Opcional)</label>
                         <input type="number" id="var-qty" min="0" placeholder="Vacío = Usa stock base">
@@ -278,6 +268,7 @@
                         <input type="number" id="sale-qty" min="1" value="1" required>
                     </div>
                     
+                    <!-- Cuadro de descripción y stock en vivo -->
                     <div class="form-group full-width" id="sale-preview-container" style="display:none; background: rgba(0, 229, 255, 0.05); padding: 12px; border-radius: 8px; border: 1px dashed rgba(0, 229, 255, 0.4);">
                         <p id="sale-desc-preview" style="font-size: 0.9rem; color: var(--text-main); line-height: 1.5;"></p>
                     </div>
@@ -317,11 +308,10 @@
             </div>
         </div>
     </div>
-
-    <!-- Contenedor para Notificaciones -->
+    <!-- ... tu código HTML anterior ... -->
     <div id="toast-container"></div>
 
-    <!-- SCRIPT DEL SERVICE WORKER (PWA) -->
+    <!-- SCRIPT DEL SERVICE WORKER (Nuevo) -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
@@ -332,7 +322,12 @@
         }
     </script>
     
-    <!-- Script Principal -->
-    <script src="js/script.js"></script>
+  <!-- Eliminar esto: -->
+    <!-- <script src="js/script.js"></script> -->
+    
+    <!-- Agregar esto: -->
+    <script type="module" src="js/script.js"></script>
+</body>
+</html>
 </body>
 </html>
