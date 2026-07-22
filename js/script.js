@@ -46,6 +46,39 @@ let editingCategoryId = null;
 let editingProductId = null;
 let editingVariationId = null;
 
+
+
+// Listener para Categorías
+onSnapshot(collection(db, "categories"), (snapshot) => {
+    categories = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    renderCategories();
+    populateDropdowns();
+    updateDashboard();
+});
+
+// Listener para Productos
+onSnapshot(collection(db, "products"), (snapshot) => {
+    products = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    renderProducts();
+    populateDropdowns();
+    updateDashboard();
+});
+
+// Listener para Variaciones
+onSnapshot(collection(db, "variations"), (snapshot) => {
+    variations = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    renderVariations();
+    renderProducts();
+    updateDashboard();
+});
+
+// Listener para Ventas
+onSnapshot(collection(db, "sales"), (snapshot) => {
+    sales = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    renderSales();
+    updateDashboard();
+});
+
 const themeToggleBtn = document.getElementById('btn-theme-toggle');
 const currentTheme = localStorage.getItem('kyrox_theme') || 'dark';
 
