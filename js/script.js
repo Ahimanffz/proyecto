@@ -37,12 +37,10 @@ let products = JSON.parse(localStorage.getItem('kyrox_products')) || [];
 let variations = JSON.parse(localStorage.getItem('kyrox_variations')) || [];
 let sales = JSON.parse(localStorage.getItem('kyrox_sales')) || [];
 
-function saveData() {
-    localStorage.setItem('kyrox_categories', JSON.stringify(categories));
-    localStorage.setItem('kyrox_products', JSON.stringify(products));
-    localStorage.setItem('kyrox_variations', JSON.stringify(variations));
-    localStorage.setItem('kyrox_sales', JSON.stringify(sales));
-}
+let categories = [];
+let products = [];
+let variations = [];
+let sales = [];
 
 let editingCategoryId = null;
 let editingProductId = null;
