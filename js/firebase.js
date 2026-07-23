@@ -1,21 +1,23 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
 
-// Reemplaza esto con los datos de tu proyecto en la consola de Firebase
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyAf8X9uXB52Kb6jf8y90MzEBMFahj20dsg",
-  authDomain: "kyrox-technology.firebaseapp.com",
-  projectId: "kyrox-technology",
-  storageBucket: "kyrox-technology.firebasestorage.app",
-  messagingSenderId: "234760615906",
-  appId: "1:234760615906:web:b8b3477098cdc257892bbb",
-  measurementId: "G-WEB1FNM75Y"
-};
-// Inicializar Firebase
-const app = initializeApp(firebaseConfig);
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyAf8X9uXB52Kb6jf8y90MzEBMFahj20dsg",
+    authDomain: "kyrox-technology.firebaseapp.com",
+    projectId: "kyrox-technology",
+    storageBucket: "kyrox-technology.firebasestorage.app",
+    messagingSenderId: "234760615906",
+    appId: "1:234760615906:web:b8b3477098cdc257892bbb",
+    measurementId: "G-WEB1FNM75Y"
+  };
 
-// Exportar servicios
-export const db = getFirestore(app);
-export const auth = getAuth(app); // Estructura preparada para Firebase Authentication
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
