@@ -1,5 +1,3 @@
-mira te voy a dejar el código original y lo editas porque me falta mucho código
-
 /* ==========================================
    ESTRUCTURAS DE DATOS Y TEMA
 ========================================== */
