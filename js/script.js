@@ -7,13 +7,15 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // Sustituye esto con las credenciales de tu proyecto de Firebase
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "TU_API_KEY",
-    authDomain: "TU_PROYECTO.firebaseapp.com",
-    projectId: "TU_PROYECTO",
-    storageBucket: "TU_PROYECTO.appspot.com",
-    messagingSenderId: "TU_SENDER_ID",
-    appId: "TU_APP_ID"
+  apiKey: "AIzaSyAf8X9uXB52Kb6jf8y90MzEBMFahj20dsg",
+  authDomain: "kyrox-technology.firebaseapp.com",
+  projectId: "kyrox-technology",
+  storageBucket: "kyrox-technology.firebasestorage.app",
+  messagingSenderId: "234760615906",
+  appId: "1:234760615906:web:b8b3477098cdc257892bbb",
+  measurementId: "G-WEB1FNM75Y"
 };
 
 const app = initializeApp(firebaseConfig);
